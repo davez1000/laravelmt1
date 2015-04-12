@@ -24,9 +24,9 @@ class Kernel extends ConsoleKernel {
 	{
 		//$schedule->command('inspire')
 		//		 ->hourly();
-    $schedule->command('inspire')
-      ->everyFiveMinutes()
-      ->sendOutputTo('testcron.txt');
+    // $schedule->command('inspire')
+    //   ->everyFiveMinutes()
+    //   ->sendOutputTo('testcron.txt');
 	}
 
 }
