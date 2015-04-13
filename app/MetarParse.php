@@ -1,5 +1,8 @@
 <?php namespace App;
 
+use Illuminate\Support\Facades\log;
+use GuzzleHttp as Guzzle;
+
 
 class MetarParse {
 
@@ -16,7 +19,7 @@ class MetarParse {
       'taf' => 'http://weather.noaa.gov/pub/data/forecasts/taf/stations/' . $icao . '.TXT',
     ];
 
-    $client = new \GuzzleHttp\Client();
+    $client = new Guzzle\Client();
     $output = [];
 
     try {
@@ -29,10 +32,11 @@ class MetarParse {
       }
       return $output;
     } catch (RequestException $e) {
-      //todo: log
-      echo $e->getRequest();
+//      $monolog = Log::getMonolog();
+      // Log errors.
+      Log::notice('Metar: Problem with request: ' . $e->getRequest());
       if ($e->hasResponse()) {
-        echo $e->hasResponse();
+        Log::notice('Metar: Problem with response: ' . $e->hasResponse());
       }
     }
   }
