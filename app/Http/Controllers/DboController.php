@@ -15,6 +15,9 @@ class DboController extends Controller {
 	 */
 	public function index()
 	{
+		// $result = Metar::all();
+		$result = Metar::where('id', '=', 1)->get();
+		print_r($result);
 		$stuff = [''];
 		return view('dbo.index', ['stuff' => $stuff]);
 	}

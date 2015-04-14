@@ -16,8 +16,9 @@
 // 	'password' => 'Auth\PasswordController',
 // ]);
 //
-Route::get('/', function() {
-  return redirect('metar/egll');
-});
+// Route::get('/', function() {
+//   return redirect('metar/egll');
+// });
+Route::get('/', 'DboController@index');
 Route::get('/metar/{icao}', 'DboController@metar');
 Route::get('/metarsearch', 'DboController@metarsearch');

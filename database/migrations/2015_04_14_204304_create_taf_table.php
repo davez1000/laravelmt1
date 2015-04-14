@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMetarTable extends Migration {
+class CreateTafTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateMetarTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('metar', function(Blueprint $table)
+		Schema::create('taf', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('icao');
@@ -28,7 +28,7 @@ class CreateMetarTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('metar');
+		Schema::drop('taf');
 	}
 
 }
