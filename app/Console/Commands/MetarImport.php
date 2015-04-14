@@ -44,14 +44,16 @@ class MetarImport extends Command {
 			$this->error('The amount specified is not a number! Remember what numbers are?');
 		}
 		else {
-			$icao = Metar::randomIcao();
-			$item = Metar::fetch($icao, $type);
-			$item = trim($item);
-			$check = Metar::where('raw', '=', $item)->first();
-			if (!$check) {
-				$m = new Metar;
-				$m->raw = $item;
-				$m->save();
+			for ($i = 0; $i < $amount; $i++) {
+				$icao = Metar::randomIcao();
+				$item = Metar::fetch($icao, $type);
+				$item = trim($item);
+				$check = Metar::where('raw', '=', $item)->first();
+				if (!$check) {
+					$m = new Metar;
+					$m->raw = $item;
+					$m->save();
+				}
 			}
 			$this->info($amount . ' items of type ' . $type . ' have now been imported!');
 		}
