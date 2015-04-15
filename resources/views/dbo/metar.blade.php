@@ -1,9 +1,7 @@
 @extends('app')
 
 @section('content')
-
-  @foreach ($metar as $m)
-    <p>{!! $m !!}</p>
-  @endforeach
+  
+  {{ $metar }}
 
 @endsection

@@ -15,7 +15,8 @@ class Metar extends Model {
    * @return Array          Parsed METAR and TAF.
    */
   public static function parse($icao = FALSE) {
-    return $output = self::fetch($icao);
+    $output = self::fetch($icao);
+    return view('dbo.metar', ['metar' => $output]);
   }
 
   /**
@@ -30,7 +31,7 @@ class Metar extends Model {
     $output = [];
 
     try {
-      $url = self::endpoints()[$type] . $icao . '.TXT';
+      $url = self::getEndpoint()[$type] . $icao . '.TXT';
       $r = $client->get($url);
       if ($r->getBody()) {
         return $r->getBody();
@@ -48,7 +49,7 @@ class Metar extends Model {
    * 
    * @return Array The endpoint URL's.
    */
-  public static function endpoints() {
+  public static function getEndpoint() {
     return [
       'metar' => 'http://weather.noaa.gov/pub/data/observations/metar/stations/',
       'taf' => 'http://weather.noaa.gov/pub/data/forecasts/taf/stations/',
