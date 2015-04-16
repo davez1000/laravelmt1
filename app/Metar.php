@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use GuzzleHttp as Guzzle;
 use Illuminate\Support\Collection;
+use App\MetarRegex;
 
 class Metar extends Model {
 
@@ -34,7 +35,8 @@ class Metar extends Model {
       $url = self::getEndpoint()[$type] . $icao . '.TXT';
       $r = $client->get($url);
       if ($r->getBody()) {
-        return $r->getBody();
+        $body = MetarRegex::$type($r->getBody());
+        return $body;
       }
     } catch (RequestException $e) {
       Log::notice('Metar: Problem with request: ' . $e->getRequest());

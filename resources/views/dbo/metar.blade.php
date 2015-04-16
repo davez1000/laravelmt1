@@ -2,6 +2,7 @@
 
 @section('content')
   
-  {{ $metar }}
+  <div>METAR</div>
+  <div>{{ $metar }}</div>
 
 @endsection
