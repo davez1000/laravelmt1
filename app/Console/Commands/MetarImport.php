@@ -46,7 +46,7 @@ class MetarImport extends Command {
 		else {
 			for ($i = 0; $i < $amount; $i++) {
 				$icao = Metar::randomIcao();
-				$item = Metar::fetch($icao, $type);
+				$item = Metar::fetch($icao, $type, TRUE);
 				$item = trim($item);
 				$check = Metar::where('raw', '=', $item)->first();
 				if (!$check) {

@@ -25,7 +25,7 @@ class Metar extends Model {
    * @param  string $icao ICAO identifier.
    * @return array        Array of METAR and TAF information.
    */
-  public static function fetch($icao, $type = 'metar') {
+  public static function fetch($icao, $type = 'metar', $import = FALSE) {
     $icao = strtoupper($icao);
 
     $client = new Guzzle\Client();
@@ -35,7 +35,10 @@ class Metar extends Model {
       $url = self::getEndpoint()[$type] . $icao . '.TXT';
       $r = $client->get($url);
       if ($r->getBody()) {
-        $body = MetarRegex::$type($r->getBody());
+        $body = $r->getBody();
+        if (!$import) {
+          $body = MetarRegex::$type($body);
+        }
         return $body;
       }
     } catch (RequestException $e) {
@@ -72,6 +75,15 @@ class Metar extends Model {
       'eglc',
       'egph',
       'egnt',
+      'egac',
+      'egcc',
+      'eghi',
+      'egjj',
+      'eggp',
+      'egvn',
+      'eggd',
+      'egff',
+      'egcn',
     ])->random();
   }
 
