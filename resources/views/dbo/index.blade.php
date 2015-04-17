@@ -2,8 +2,8 @@
 
 @section('content')
 
-  @foreach ($stuff as $s)
-    <p>{!! $s !!}</p>
+  @foreach ($result as $r)
+    <p>{!! $r->raw !!}</p>
   @endforeach
 
 @endsection
