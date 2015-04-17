@@ -1,7 +1,6 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use GuzzleHttp as Guzzle;
 use Illuminate\Support\Collection;
 use App\MetarRegex;
 
@@ -28,14 +27,16 @@ class Metar extends Model {
   public static function fetch($icao, $type = 'metar', $import = FALSE) {
     $icao = strtoupper($icao);
 
-    $client = new Guzzle\Client();
-    $output = [];
-
     try {
+      // Guzzle request.
+      $client = new \GuzzleHttp\Client();
+      $output = [];
+
       $url = self::getEndpoint()[$type] . $icao . '.TXT';
       $r = $client->get($url);
       if ($r->getBody()) {
         $body = $r->getBody();
+        // Only apply regex if we are not importing to database.
         if (!$import) {
           $body = MetarRegex::$type($body);
         }
