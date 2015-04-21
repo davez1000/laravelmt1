@@ -22,3 +22,5 @@
 Route::get('/', 'DboController@index');
 Route::get('/metar/{icao}', 'DboController@metar');
 Route::get('/metarsearch', 'DboController@metarsearch');
+Route::get('/testing', 'DboController@testing');
+
