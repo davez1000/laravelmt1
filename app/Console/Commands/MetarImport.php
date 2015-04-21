@@ -50,7 +50,7 @@ class MetarImport extends Command {
 				$item = trim($item);
 				$check = Metar::where('raw', '=', $item)->first();
 				if (!$check) {
-					preg_match('/^\S+?\s+\S+?\s+(\S+).+$/', $item, $matches);
+					preg_match('/^(?:\S+?\s+){2}(\S+).+$/', $item, $matches);
 					$m = new Metar;
 					$m->icao = $matches[1];
 					$m->raw = $item;
