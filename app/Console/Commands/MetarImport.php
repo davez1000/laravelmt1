@@ -52,7 +52,9 @@ class MetarImport extends Command {
 				if (!$check) {
 					preg_match('/^(?:\S+?\s+){2}(\S+).+$/', $item, $matches);
 					$m = new Metar;
-					$m->icao = $matches[1];
+					if (!empty($matches[1]) && preg_match('/^[A-Z]{4}$/', $matches[1])) {
+						$m->icao = $matches[1];
+					}
 					$m->raw = $item;
 					$m->save();
 				}

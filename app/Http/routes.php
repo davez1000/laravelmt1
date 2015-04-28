@@ -22,5 +22,6 @@
 Route::get('/', 'DboController@index');
 Route::get('/metar/{icao}', 'DboController@metar');
 Route::get('/metarsearch', 'DboController@metarsearch');
-Route::get('/testing', 'DboController@testing');
+Route::get('/twatter/api/{type?}', 'TwatterController@create');
+Route::post('/twatter/api/data/store', 'TwatterController@store');
 

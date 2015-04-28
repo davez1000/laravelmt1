@@ -31,6 +31,12 @@ class DboController extends Controller {
 		return view('dbo.metar', ['metar' => $metar]);
 	}
 
+	public function testing() {
+		$stuff = [];
+		return view('dbo.testing', ['stuff' => $stuff]);
+
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
