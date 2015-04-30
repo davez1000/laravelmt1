@@ -22,6 +22,13 @@
 Route::get('/', 'DboController@index');
 Route::get('/metar/{icao}', 'DboController@metar');
 Route::get('/metarsearch', 'DboController@metarsearch');
-Route::get('/twatter/api/{type?}', 'TwatterController@create');
+
+// Not allowed methods.
+Route::get('/twatter/{param}', function() {
+  return redirect('/');
+})->where(['param' => 'api|api/data|api/data/store']);
+
 Route::post('/twatter/api/data/store', 'TwatterController@store');
+Route::get('/twatter/api/{type?}', 'TwatterController@create');
+
 

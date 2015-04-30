@@ -2,13 +2,8 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-
-use Input;
-use Validator;
-use Redirect;
-use Session;
+use App\Http\Requests\TwatterRequest;
+use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TwatterController extends Controller {
 
@@ -46,36 +41,38 @@ class TwatterController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(TwatterRequest $request)
 	{
-		// getting all of the post data
-		$file = array('image' => Input::file('image'));
-		// setting up rules
-		// $rules = array('image' => 'image|mimes:jpeg,gif,png|max:3145728');
-		$rules = array('required');
-		// doing the validation, passing post data, rules and the messages
-		$validator = Validator::make($file, $rules);
-		if ($validator->fails()) {
-		  // send back to the page with the input data and errors
-		  return Redirect::to('twatter/api/update')->withInput()->withErrors($validator);
-		}
-		else {
-		  // checking file is valid.
-		  if (Input::file('image')->isValid()) {
-		    $destinationPath = 'public/uploads/' . str_random(8); // upload path
-		    $extension = Input::file('image')->getClientOriginalExtension(); // getting image extension
-		    $fileName = rand(11111,99999) . '.' . $extension; // renaming image
-		    Input::file('image')->move($destinationPath, $fileName); // uploading file to given path
-		    // sending back with message
-		    Session::flash('success', 'Upload successfully'); 
-		    return Redirect::to('twatter/api/update');
-		  }
-		  else {
-		    // sending back with error message.
-		    Session::flash('error', 'uploaded file is not valid');
-		    return Redirect::to('twatter/api/update');
-		  }
-		}
+		if ($request->file('image')) {
+	    $file_ext = $request->file('image')->getClientOriginalExtension();
+	    $file_name = md5(uniqid()) . sha1(uniqid()) . '.' . $file_ext;
+
+	    $moved_file = $request->file('image')->move(
+	      base_path() . '/public/images/catalog/', $file_name
+	    );
+  	}
+
+    $connection = new TwitterOAuth(
+    	env('OAUTH_CONSUMER_KEY'),
+    	env('OAUTH_CONSUMER_SECRET'),
+    	env('OAUTH_ACCESS_TOKEN'),
+    	env('OAUTH_ACCESS_TOKEN_SECRET')
+    );
+    $media1 = $connection->upload('media/upload', array('media' => $moved_file));
+    // $media2 = $connection->upload('media/upload', array('media' => ''));
+    $parameters = array(
+        'status' => trim($request->input('status')),
+        'media_ids' => implode(',', array($media1->media_id_string)),
+    );
+    $result = $connection->post('statuses/update', $parameters);
+    
+    // $request = new \stdClass();
+    // $request->created_at = 'debug = TRUE';
+    if (!empty($request->created_at)) {
+  		\Session::flash('message', 'Sent successfully!'); 
+			\Session::flash('alert-class', 'alert-info');
+    	return redirect('twatter/api/update');
+    }
 	}
 
 	/**
