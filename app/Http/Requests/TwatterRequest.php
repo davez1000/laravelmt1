@@ -21,10 +21,14 @@ class TwatterRequest extends Request {
 	 */
 	public function rules()
 	{
-		return [
-			'status' => 'required|max:140',
-			'image' => 'mimes:jpeg,gif,png|max:3145728',
-		];
+		// Create status and multiple image rules.
+		$image_rule = 'mimes:jpeg,gif,png|max:3145728';
+		$rules = [];
+		$rules['status'] = 'required|max:140';
+		for ($i=0; $i<4; $i++) { 
+			$rules['image'. $i] = $image_rule;
+		}
+		return $rules;
 	}
 
 }

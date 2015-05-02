@@ -4,7 +4,7 @@
 
     <div class="container">
 
-        <h2 class="form-signin-heading">Send This Dude</h2>
+        <h2 class="form-signin-heading">Send This</h2>
 
         @if(Session::has('message'))
             <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
@@ -28,18 +28,20 @@
                     @endforeach
                 </p>
             @endif
+            
+            @for($i = 0; $i < 4; $i++)
+                <div>{!! Form::label('status', 'Image ' . ($i + 1) . ':') !!}</div>
+                <div>{!! Form::file('image' . $i, NULL, array('class' => 'input-block-level')) !!}</div>
+                @if($errors->get('image' . $i))
+                    <p class="errors">
+                        @foreach($errors->get('image' . $i) as $e)
+                            {!! $e !!}
+                        @endforeach
+                    </p>
+                @endif
+            @endfor
 
-            <div>{!! Form::label('status', 'Image (optional):') !!}</div>
-            <div>{!! Form::file('image', NULL, array('class' => 'input-block-level')) !!}</div>
-            @if($errors->get('image'))
-                <p class="errors">
-                    @foreach($errors->get('image') as $e)
-                        {!! $e !!}
-                    @endforeach
-                </p>
-            @endif
-
-            <div>{!! Form::submit('Send', array('class'=>'btn btn-large btn-primary')) !!}</div>
+            <div>{!! Form::submit('Post', array('class'=>'btn btn-large btn-primary')) !!}</div>
 
             {!! Form::close() !!}
         </div>
