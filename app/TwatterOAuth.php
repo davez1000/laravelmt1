@@ -14,7 +14,7 @@ class TwatterOAuth extends TwitterOAuth
       env('OAUTH_ACCESS_TOKEN_SECRET')
     );
     // Set default timeouts for OAuth.
-    // This should be long enough to upload multiple images.
+    // This should be long enough to upload multiple images (up to 4).
     $this->setTimeouts(600, 600);
   }
 

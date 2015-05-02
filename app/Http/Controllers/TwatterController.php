@@ -48,13 +48,14 @@ class TwatterController extends Controller {
 			$media_id_strings = [];
 			$parameters['status'] = trim($request->input('status'));
 
-			for ($i=0; $i < 4; $i++) { 
+			for ($i=0; $i < 4; $i++) {
 				if ($request->file('image' . $i)) {
 					$file_ext = $request->file('image' . $i)->getClientOriginalExtension();
-					$file_name = md5(uniqid()) . sha1(uniqid()) . '.' . $file_ext;
+					$file_ext  = (strcasecmp($file_ext, 'jpeg') == 0)? 'jpg' : strtolower($file_ext);
+					$file_name = uniqid() . '_' . substr(md5(mt_rand()), 0, 18) . '.' . $file_ext;
 
 					$moved_file = $request->file('image' . $i)->move(
-						base_path() . '/public/images/catalog/', $file_name
+						base_path() . env('IMAGE_CATALOG_PATH', '/public/images/catalog/'), $file_name
 					);
 				}
 				$media = $connection->upload('media/upload', array('media' => $moved_file));
@@ -63,9 +64,9 @@ class TwatterController extends Controller {
 
 			$parameters['media_ids'] = implode(',', $media_id_strings);
 
-	    $result = $connection->post('statuses/update', $parameters);
+			$result = $connection->post('statuses/update', $parameters);
 			if ($request->created_at) {
-				\Session::flash('message', 'Sent successfully!'); 
+				\Session::flash('message', 'Sent successfully!');
 				\Session::flash('alert-class', 'alert-info');
 				return redirect('twatter/api/update');
 			}
