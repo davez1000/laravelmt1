@@ -57,19 +57,36 @@ class TwatterController extends Controller {
 					$moved_file = $request->file('image' . $i)->move(
 						base_path() . env('IMAGE_CATALOG_PATH', '/public/images/catalog/'), $file_name
 					);
+					$media = $connection->upload('media/upload', array('media' => $moved_file));
+					$media_id_strings[] = $media->media_id_string;
 				}
-				$media = $connection->upload('media/upload', array('media' => $moved_file));
-				$media_id_strings[] = $media->media_id_string;
 			}
 
-			$parameters['media_ids'] = implode(',', $media_id_strings);
+			if (count($media_id_strings) > 0) {
+				$parameters['media_ids'] = implode(',', $media_id_strings);
+			}
 
 			$result = $connection->post('statuses/update', $parameters);
-			if ($request->created_at) {
+			if ($connection->getLastHttpCode() == 200) {
 				\Session::flash('message', 'Sent successfully!');
 				\Session::flash('alert-class', 'alert-info');
-				return redirect('twatter/api/update');
 			}
+			else {
+				$body_error_messages = [];
+				if ($connection->getLastBody()->errors) {
+					foreach ($connection->getLastBody()->errors as $key => $value) {
+						$body_error_messages[] = '(' . $value->code . ' : ' . $value->message . ')';
+					}
+				}
+				$error_messages = [
+					$connection->getLastHttpCode(),
+					$connection->requestErrorMessages()[$connection->getLastHttpCode()],
+					implode(' ', $body_error_messages),
+				];
+				\Session::flash('message', 'There was a problem sending the message: ' . implode(' - ', $error_messages));
+				\Session::flash('alert-class', 'alert-danger');
+			}
+			return redirect('twatter/api/update');
 		}
 
 	/**
