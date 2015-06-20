@@ -18,7 +18,6 @@
 
         <div>
             {!! Form::open(array('action' => 'TwatterController@store', 'files' => TRUE)) !!}
-
             <div>{!! Form::label('status', 'Status Text:') !!}</div>
             <div>{!! Form::textarea('status', NULL, array('class' => 'input-block-level')) !!}</div>
             @if($errors->get('status'))
@@ -29,6 +28,8 @@
                 </p>
             @endif
             
+            <div>[Max image size dimensions is 2048x2048px]</div>
+
             @for($i = 0; $i < 4; $i++)
                 <div>{!! Form::label('status', 'Image ' . ($i + 1) . ':') !!}</div>
                 <div>{!! Form::file('image' . $i, NULL, array('class' => 'input-block-level')) !!}</div>
