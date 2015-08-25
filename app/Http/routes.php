@@ -31,4 +31,5 @@ Route::get('/twatter/{param}', function() {
 Route::post('/twatter/api/data/store', 'TwatterController@store');
 Route::get('/twatter/api/{type?}', 'TwatterController@create');
 
+Route::get('/fr/api/test', 'FrController@index');
 
