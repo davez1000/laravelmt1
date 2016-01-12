@@ -43,6 +43,10 @@ class TwatterController extends Controller {
 
     $parameters = [];
     $media_id_strings = [];
+
+    // Initially set the location to false.
+    $parameters['geo_enabled'] = FALSE;
+
     $parameters['status'] = trim($request->input('status'));
 
     for ($i = 0; $i < 4; $i++) {
@@ -58,9 +62,15 @@ class TwatterController extends Controller {
         $media_id_strings[] = $media->media_id_string;
       }
     }
-
     if (count($media_id_strings) > 0) {
       $parameters['media_ids'] = implode(',', $media_id_strings);
+    }
+
+    if (is_numeric($lat = trim($request->input('lat'))) && is_numeric($long = trim($request->input('long')))) {
+      $parameters['lat'] = $lat;
+      $parameters['long'] = $long;
+      $parameters['display_coordinates'] = TRUE;
+      $parameters['geo_enabled'] = TRUE;
     }
 
     $result = $connection->post('statuses/update', $parameters);

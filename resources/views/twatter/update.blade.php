@@ -19,7 +19,8 @@
         <div>
             {!! Form::open(array('action' => 'TwatterController@store', 'files' => TRUE)) !!}
             <div>{!! Form::label('status', 'Status Text:') !!}</div>
-            <div>{!! Form::textarea('status', NULL, array('class' => 'input-block-level')) !!}</div>
+            <div>{!! Form::textarea('status', NULL, array('class' => 'input-block-level')) !!}<br /></div>
+            <div>lat: {!! Form::text('lat', NULL, array('class' => '')) !!} long: {!! Form::text('long', NULL, array('class' => '')) !!}</div>
             @if($errors->get('status'))
                 <p class="errors">
                     @foreach($errors->get('status') as $e)
